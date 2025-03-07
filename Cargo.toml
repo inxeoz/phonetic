@@ -1,0 +1,13 @@
+[package]
+name = "phonetic"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.1"
+tokio = { version = "1.43.0", features = ["full"] } # Added "full" feature
+serde = { version = "1.0.218", features = ["derive"] }
+tower = "0.5.2"
+hyper = "1.6.0"
+serde_json = "1.0.140"
+futures = "0.3.31"

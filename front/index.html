@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCP Client</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Enter Text to Convert</h1>
+    <label for="inputText">
+        <input type="text" id="inputText" placeholder="Enter text">
+    </label>
+    <button onclick="convertText()">Convert</button>
+    <p id="outputText"></p>
+</div>
+
+<script>
+    async function convertText() {
+        let inputText = document.getElementById("inputText").value;
+        if (!inputText.trim()) {
+            alert("Please enter text!");
+            return;
+        }
+
+        let response = await fetch("http://127.0.0.1:3002/convert", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: inputText })
+        });
+
+        let data = await response.json();
+        document.getElementById("outputText").innerText = data.phonetic || data.error;
+    }
+</script>
+</body>
+</html>
