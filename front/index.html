@@ -9,29 +9,36 @@
 <body>
 <div class="container">
     <h1>Enter Text to Convert</h1>
-    <label for="inputText">
-        <input type="text" id="inputText" placeholder="Enter text">
-    </label>
+    <label for="inputText">Enter Text:</label>
+    <input type="text" id="inputText" placeholder="Enter text">
     <button onclick="convertText()">Convert</button>
     <p id="outputText"></p>
 </div>
 
 <script>
     async function convertText() {
-        let inputText = document.getElementById("inputText").value;
-        if (!inputText.trim()) {
+        let inputText = document.getElementById("inputText").value.trim();
+        if (!inputText) {
             alert("Please enter text!");
             return;
         }
 
-        let response = await fetch("http://127.0.0.1:3002/convert", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: inputText })
-        });
+        try {
+            let response = await fetch("http://127.0.0.1:3005/convert", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: inputText })
+            });
 
-        let data = await response.json();
-        document.getElementById("outputText").innerText = data.phonetic || data.error;
+            if (!response.ok) {
+                throw new Error("Server error: " + response.statusText);
+            }
+
+            let data = await response.json();
+            document.getElementById("outputText").innerText = data.phonetic || data.error;
+        } catch (error) {
+            document.getElementById("outputText").innerText = "Error: " + error.message;
+        }
     }
 </script>
 </body>
